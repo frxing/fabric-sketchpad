@@ -1,4 +1,4 @@
-# fabric-board
+# fabric-sketchpad
 
 ## Project setup
 ```
