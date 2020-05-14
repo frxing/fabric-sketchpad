@@ -106,8 +106,8 @@ export default {
   mounted () {
     this.boardObj = new fabric.Canvas('myCanvas', {
       isDrawingMode: true, // 是否可以自由绘制
-      selectable: false, // 控件不能被选择
-      selection: false, // 画板中是否显示选中
+      selectable: true, // 控件不能被选择
+      selection: true, // 画板中是否显示选中
       devicePixelRatio: true
     })
     this.boardObj.freeDrawingBrush.color = '#f30' // 设置自由画笔的颜色
@@ -123,7 +123,10 @@ export default {
           console.log('down', e)
           let { x, y } = e.pointer
           this.mouseFrom = { x, y }
-          this.isDrawing = true
+          // 判断是否选中了对象
+          if (!this.boardObj.getActiveObject()) {
+            this.isDrawing = true
+          }
           if (this.toolType === 'text') {
             this.drawText()
           }
@@ -157,6 +160,7 @@ export default {
           console.log('旋转', e)
         },
         'selection:created': e => {
+          console.log('选中了')
           if (this.toolType === 'rubber') {
             if (e.target._objects) {
               // 多选删除
@@ -180,6 +184,8 @@ export default {
         this.boardObj.remove(this.drawingObj)
       }
       this.boardObj.isDrawingMode = false
+      this.boardObj.selectable = false
+      this.boardObj.selection = false
       let drawObj = null
       switch (this.toolType) {
         case 'pencil':
@@ -208,6 +214,9 @@ export default {
           break
         default:
           drawObj = null
+          this.boardObj.selection = true
+          this.boardObj.skipTargetFind = false
+          this.boardObj.selectable = true
           break
       }
       if (drawObj) {
@@ -240,9 +249,9 @@ export default {
       }
     },
     resetDrawObj () {
-      this.boardObj.selectable = false
-      this.boardObj.selection = false
-      this.boardObj.skipTargetFind = true
+      this.boardObj.selectable = true
+      this.boardObj.selection = true
+      this.boardObj.skipTargetFind = false
       if (this.textObj) {
         this.textObj.exitEditing()
         this.textObj = null
@@ -400,7 +409,7 @@ export default {
 #myCanvas {
   width: 100%;
   height: 100%;
-  background: #399;
+  background: #fff;
 }
 .tool-box {
   position: absolute;
@@ -408,7 +417,7 @@ export default {
   left: 0;
   height: 100%;
   z-index: 10;
-  background: #f0f0f0;
+  background: #d0d0d0;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
