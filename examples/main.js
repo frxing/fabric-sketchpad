@@ -2,7 +2,11 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-import './registerServiceWorker'
+import vueFabricSketchpad from '../packages/sketchpad'
+import './assets/css/base.scss'
+import './assets/font/iconfont.css'
+
+Vue.use(vueFabricSketchpad)
 
 Vue.config.productionTip = false
 

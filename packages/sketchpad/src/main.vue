@@ -1,19 +1,120 @@
 <template>
-<div class="board-box">
-  <ul class="tool-box">
-    <li v-for="item in tools" :key="item.type" class="tool-con" :class="{active: toolType === item.type}" @click="changeTool(item.type)">
-      <i class="iconfont" :class="item.icon"></i>
-    </li>
-  </ul>
-  <canvas id="myCanvas" ref="myCanvas"></canvas>
-</div>
+  <div class="board-box" :style="{width: canvasWidth + 'px', height: canvasHeight + 'px'}">
+    <ul class="tool-box">
+      <li v-for="item in tools" :key="item.type" class="tool-con" :class="{active: toolType === item.type}" @click="changeTool(item.type)">
+        <i class="iconfont" :class="item.icon"></i>
+      </li>
+    </ul>
+    <canvas id="myCanvas" ref="myCanvas"></canvas>
+  </div>
 </template>
 
 <script>
 import { fabric } from 'fabric'
 
+let defaultProps = {
+  canvasWidth: {
+    type: Number,
+    default: window.innerWidth
+  },
+  canvasHeight: {
+    type: Number,
+    default: window.innerHeight
+  },
+  canvasBgColor: {
+    type: String,
+    default: '#f6f6f6'
+  },
+  strokeColor: {
+    type: String,
+    default: '#f30'
+  },
+  strokeWidth: {
+    type: Number,
+    default: 2
+  },
+  showTools: {
+    type: Boolean,
+    default: true
+  }
+}
+
+const TOOLS = [
+  {
+    name: '铅笔',
+    type: 'pencil',
+    icon: 'icon-pan_icon'
+  },
+  {
+    name: '实线',
+    type: 'line',
+    icon: 'icon-xian'
+  },
+  {
+    name: '虚线',
+    type: 'dashedLine',
+    icon: 'icon-xian1'
+  },
+  {
+    name: '箭头',
+    type: 'arrow',
+    icon: 'icon-jiantou'
+  },
+  {
+    name: '文字',
+    type: 'text',
+    icon: 'icon-wenzi'
+  },
+  {
+    name: '矩形',
+    type: 'rect',
+    icon: 'icon-juxing'
+  },
+  {
+    name: '圆形',
+    type: 'cricle',
+    icon: 'icon-yuanxing'
+  },
+  {
+    name: '椭圆形',
+    type: 'ellipse',
+    icon: 'icon-tuoyuanxing'
+  },
+  {
+    name: '三角形',
+    type: 'equilateral',
+    icon: 'icon-sanjiaoxing'
+  },
+  {
+    name: '橡皮',
+    type: 'rubber',
+    icon: 'icon-xiangpi'
+  },
+  {
+    name: '回退',
+    type: 'undo',
+    icon: 'icon-undo'
+  },
+  {
+    name: '向前',
+    type: 'redo',
+    icon: 'icon-redo'
+  },
+  {
+    name: '清除',
+    type: 'clear',
+    icon: 'icon-clear'
+  },
+  {
+    name: '移动',
+    type: 'move',
+    icon: 'icon-yidong'
+  }
+
+]
+
 export default {
-  name: 'Board',
+  name: 'vue-fabric-sketchpad',
   data () {
     return {
       boardObj: null, // 存储当前画布对象
@@ -21,88 +122,14 @@ export default {
       mouseTo: {}, // 鼠标抬起的位置
       toolType: 'pencil', // 当前工具类型
       isDrawing: false, // 是否正在画 鼠标按下和抬起的开关控制
-      drawColor: '#f30', // 绘制图形线条的颜色
-      drawWidth: 2, // 绘制图形线条的宽度
       drawingObj: null, // 正在绘制的对象
       history: [], // 存放历史记录
       textObj: null, // 存储文字对象
-      moveCount: 1, // 用来节流绘制
       stage: 0,
-      tools: [
-        {
-          name: '铅笔',
-          type: 'pencil',
-          icon: 'icon-pan_icon'
-        },
-        {
-          name: '实线',
-          type: 'line',
-          icon: 'icon-xian'
-        },
-        {
-          name: '虚线',
-          type: 'dashedLine',
-          icon: 'icon-xian1'
-        },
-        {
-          name: '箭头',
-          type: 'arrow',
-          icon: 'icon-jiantou'
-        },
-        {
-          name: '文字',
-          type: 'text',
-          icon: 'icon-wenzi'
-        },
-        {
-          name: '矩形',
-          type: 'rect',
-          icon: 'icon-juxing'
-        },
-        {
-          name: '圆形',
-          type: 'cricle',
-          icon: 'icon-yuanxing'
-        },
-        {
-          name: '椭圆形',
-          type: 'ellipse',
-          icon: 'icon-tuoyuanxing'
-        },
-        {
-          name: '三角形',
-          type: 'equilateral',
-          icon: 'icon-sanjiaoxing'
-        },
-        {
-          name: '橡皮',
-          type: 'rubber',
-          icon: 'icon-xiangpi'
-        },
-        {
-          name: '回退',
-          type: 'undo',
-          icon: 'icon-undo'
-        },
-        {
-          name: '向前',
-          type: 'redo',
-          icon: 'icon-redo'
-        },
-        {
-          name: '清除',
-          type: 'clear',
-          icon: 'icon-clear'
-        },
-        {
-          name: '移动',
-          type: 'move',
-          icon: 'icon-yidong'
-        }
-
-      ]
+      tools: TOOLS
     }
   },
+  props: defaultProps,
   mounted () {
     this.boardObj = new fabric.Canvas('myCanvas', {
       isDrawingMode: true, // 是否可以自由绘制
@@ -110,10 +137,10 @@ export default {
       selection: true, // 画板中是否显示选中
       devicePixelRatio: true
     })
-    this.boardObj.freeDrawingBrush.color = '#f30' // 设置自由画笔的颜色
-    this.boardObj.freeDrawingBrush.width = 2 // 自由画笔的宽度
-    this.boardObj.setWidth(window.innerWidth)
-    this.boardObj.setHeight(window.innerHeight)
+    this.boardObj.freeDrawingBrush.color = this.strokeColor // 设置自由画笔的颜色
+    this.boardObj.freeDrawingBrush.width = this.strokeWidth // 自由画笔的宽度
+    this.boardObj.setWidth(this.canvasWidth)
+    this.boardObj.setHeight(this.canvasHeight)
     this.initEvent()
   },
   methods: {
@@ -260,8 +287,8 @@ export default {
     // 画实线
     drawLine () {
       return new fabric.Line([this.mouseFrom.x, this.mouseFrom.y, this.mouseTo.x, this.mouseTo.y], {
-        stroke: this.drawColor,
-        strokeWidth: this.drawWidth
+        stroke: this.strokeColor,
+        strokeWidth: this.strokeWidth
       })
     },
     // 画虚线
@@ -269,8 +296,8 @@ export default {
       return new fabric.Line(
         [this.mouseFrom.x, this.mouseFrom.y, this.mouseTo.x, this.mouseTo.y],
         {
-          stroke: this.drawColor,
-          strokeWidth: this.drawWidth,
+          stroke: this.strokeColor,
+          strokeWidth: this.strokeWidth,
           strokeDashArray: [10, 3]
         }
       )
@@ -282,8 +309,8 @@ export default {
         top: this.mouseFrom.y,
         height: Math.abs(this.mouseTo.y - this.mouseFrom.y),
         width: Math.abs(this.mouseTo.x - this.mouseFrom.x),
-        stroke: this.drawColor,
-        strokeWidth: this.drawWidth,
+        stroke: this.strokeColor,
+        strokeWidth: this.strokeWidth,
         fill: 'rgba(255, 255, 255, 0)'
       })
     },
@@ -296,10 +323,10 @@ export default {
       return new fabric.Circle({
         left: this.mouseFrom.x,
         top: this.mouseFrom.y,
-        stroke: this.drawColor,
+        stroke: this.strokeColor,
         fill: 'rgba(255, 255, 255, 0)',
         radius: r,
-        strokeWidth: this.drawWidth
+        strokeWidth: this.strokeWidth
       })
     },
     // 画椭圆
@@ -309,13 +336,13 @@ export default {
       return new fabric.Ellipse({
         left: left,
         top: top,
-        stroke: this.drawColor,
+        stroke: this.strokeColor,
         fill: 'rgba(255, 255, 255, 0)',
         originX: 'center',
         originY: 'center',
         rx: Math.abs(left - this.mouseTo.x),
         ry: Math.abs(top - this.mouseTo.y),
-        strokeWidth: this.drawWidth
+        strokeWidth: this.strokeWidth
       })
     },
     // 画等边三角形
@@ -326,8 +353,8 @@ export default {
         left: this.mouseFrom.x,
         width: Math.sqrt(Math.pow(height, 2) + Math.pow(height / 2, 2)),
         height: height,
-        stroke: this.drawColor,
-        strokeWidth: this.drawWidth,
+        stroke: this.strokeColor,
+        strokeWidth: this.strokeWidth,
         fill: 'rgba(255,255,255,0)'
       })
     },
@@ -358,9 +385,9 @@ export default {
       arrowY = ey + botY
       path += ' L ' + arrowX + ' ' + arrowY
       return new fabric.Path(path, {
-        stroke: this.drawColor,
+        stroke: this.strokeColor,
         fill: 'rgba(255,255,255,0)',
-        strokeWidth: this.drawWidth
+        strokeWidth: this.strokeWidth
       })
     },
     drawText () {
@@ -370,7 +397,7 @@ export default {
         top: y,
         width: '',
         height: '',
-        fill: this.drawColor,
+        fill: this.strokeColor,
         hasControls: true
       })
       this.boardObj.add(this.textObj)
@@ -409,7 +436,7 @@ export default {
 #myCanvas {
   width: 100%;
   height: 100%;
-  background: #fff;
+  background: #f6f6f6;
 }
 .tool-box {
   position: absolute;
