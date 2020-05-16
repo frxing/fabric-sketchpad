@@ -6,15 +6,38 @@
 }
 .tool-box {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 50px;
-  height: 100%;
   z-index: 10;
   background: #d0d0d0;
   display: flex;
-  flex-direction: column;
   justify-content: space-between;
+  &.tool-box--left {
+    top: 0;
+    left: 0;
+    width: 50px;
+    height: 100%;
+    flex-direction: column;
+  }
+  &.tool-box--top {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 50px;
+    flex-direction: row;
+  }
+  &.tool-box--right {
+    top: 0;
+    right: 0;
+    width: 50px;
+    height: 100%;
+    flex-direction: column;
+  }
+  &.tool-box--bottom {
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 50px;
+    flex-direction: row;
+  }
   .tool-con {
     width: 50px;
     height: 50px;

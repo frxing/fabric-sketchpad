@@ -1,6 +1,6 @@
 <template>
   <div class="board-box" :style="{width: canvasWidth + 'px', height: canvasHeight + 'px'}">
-    <ul class="tool-box">
+    <ul class="tool-box" :class="{'tool-box--left': placement === 'left', 'tool-box--top': placement === 'top', 'tool-box--right': placement === 'right', 'tool-box--bottom': placement === 'bottom'}">
       <li v-for="item in tools" :key="item.type" class="tool-con" :class="{active: toolType === item.type}" @click="changeTool(item.type)">
         <i class="iconfont" :class="item.icon"></i>
       </li>
@@ -38,6 +38,10 @@ let defaultProps = {
   showTools: {
     type: Boolean,
     default: true
+  },
+  placement: {
+    type: String,
+    default: 'right'
   }
 }
 
