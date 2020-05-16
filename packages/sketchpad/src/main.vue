@@ -462,6 +462,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
+@import "../../../src/assets/font/iconfont.css";
 #myCanvas {
   width: 100%;
   height: 100%;
@@ -471,6 +472,7 @@ export default {
   position: absolute;
   top: 0;
   left: 0;
+  width: 50px;
   height: 100%;
   z-index: 10;
   background: #d0d0d0;
@@ -493,6 +495,7 @@ export default {
 .board-box {
   width: 100%;
   height: 100%;
+  position: relative;
   .btn {
     width: 80px;
     height: 30px;
