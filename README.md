@@ -2,18 +2,18 @@
 
 ## 项目运行
 
-```
-git clone git@github.com:frxing/fabric-sketchpad.git
-cd fabric-sketchpad
-npm install 
-npm run serve
+```javascript
+   git clone git@github.com:frxing/fabric-sketchpad.git
+   cd fabric-sketchpad
+   npm install 
+   npm run serve
 ```
 
-##### 支持vue组件形式安转
+## 支持vue组件形式安转使用
 
 1. 安装
    
-   ```
+   ```javascript
    npm i vue-fabric-sketchpad -S
    ```
 2. 引入---在项目src目录下的main.js文件中
@@ -26,5 +26,14 @@ npm run serve
 3. 使用
    
    ```javascript
-   
+    <template>
+        <vue-fabric-sketchpad />
+    </template>
+    
+    <script>
+    export default {
+        name: 'XXX',
+        components: {}
+    }
+    </script>
    ```
