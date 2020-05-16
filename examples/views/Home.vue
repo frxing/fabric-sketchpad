@@ -1,7 +1,5 @@
 <template>
-  <div class="home">
-    <vue-fabric-sketchpad />
-  </div>
+  <vue-fabric-sketchpad />
 </template>
 
 <script>

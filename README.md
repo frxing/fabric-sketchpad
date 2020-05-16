@@ -1,21 +1,30 @@
-# fabric-sketchpad
+# vue-fabric-sketchpad
 
-## Project setup
-```
-yarn install
-```
+## 项目运行
 
-### Compiles and hot-reloads for development
 ```
-yarn run serve
-```
-
-### Compiles and minifies for production
-```
-yarn run build
+git clone git@github.com:frxing/fabric-sketchpad.git
+cd fabric-sketchpad
+npm install 
+npm run serve
 ```
 
-### Lints and fixes files
-```
-yarn run lint
-```
+##### 支持vue组件形式安转
+
+1. 安装
+   
+   ```
+   npm i vue-fabric-sketchpad -S
+   ```
+2. 引入---在项目src目录下的main.js文件中
+   
+   ```javascript
+   import vueFabricSketchpad from 'vue-fabric-sketchpad'
+   import 'vue-fabric-sketchpad/lib/vue-fabric-sketchpad.css'
+   Vue.use(vueFabricSketchpad)
+   ```
+3. 使用
+   
+   ```javascript
+   
+   ```

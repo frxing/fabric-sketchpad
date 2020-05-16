@@ -12,6 +12,7 @@
 <script>
 import { fabric } from 'fabric'
 import FileSaver from 'file-saver'
+import './index.scss'
 
 let defaultProps = {
   canvasWidth: {
@@ -459,48 +460,3 @@ export default {
   }
 }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss">
-@import "../../../src/assets/font/iconfont.css";
-#myCanvas {
-  width: 100%;
-  height: 100%;
-  background: #f6f6f6;
-}
-.tool-box {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 50px;
-  height: 100%;
-  z-index: 10;
-  background: #d0d0d0;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  .tool-con {
-    width: 50px;
-    height: 50px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 30px;
-    &.active {
-      background: #333;
-      color: #fff;
-    }
-  }
-}
-.board-box {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  .btn {
-    width: 80px;
-    height: 30px;
-    background: #f0f0f0;
-    margin: 0 5px;
-  }
-}
-</style>

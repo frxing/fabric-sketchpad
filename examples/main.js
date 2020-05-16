@@ -4,7 +4,6 @@ import router from './router'
 import store from './store'
 import vueFabricSketchpad from '../packages/sketchpad'
 import './assets/css/base.scss'
-// import './assets/font/iconfont.css'
 
 Vue.use(vueFabricSketchpad)
 
@@ -14,4 +13,4 @@ new Vue({
   router,
   store,
   render: h => h(App)
-}).$mount('#app')
+}).$mount('#vue-fabric-sketchpad')
