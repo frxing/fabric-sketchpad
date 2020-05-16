@@ -13,5 +13,8 @@ module.exports = {
   },
   parserOptions: {
     parser: 'babel-eslint'
+  },
+  globals: {
+    Canvas2Image: true
   }
 }

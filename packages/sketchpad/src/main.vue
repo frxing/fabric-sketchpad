@@ -11,6 +11,7 @@
 
 <script>
 import { fabric } from 'fabric'
+import FileSaver from 'file-saver'
 
 let defaultProps = {
   canvasWidth: {
@@ -109,6 +110,11 @@ const TOOLS = [
     name: '移动',
     type: 'move',
     icon: 'icon-yidong'
+  },
+  {
+    name: '下载',
+    type: 'download',
+    icon: 'icon-xiazai'
   }
 
 ]
@@ -256,6 +262,11 @@ export default {
     changeTool (type) {
       this.boardObj.isDrawingMode = false
       this.resetDrawObj()
+      // 如果有选中的对象先清除选中
+      if (this.boardObj.getActiveObject()) {
+        this.boardObj.discardActiveObject()
+        this.boardObj.renderAll()
+      }
       if (type === 'clear') {
         return this.boardObj.clear()
       }
@@ -264,6 +275,9 @@ export default {
       }
       if (type === 'redo') {
         return this.redo()
+      }
+      if (type === 'download') {
+        return this.composeImg()
       }
       this.toolType = type
       if (type === 'pencil') {
@@ -426,6 +440,21 @@ export default {
         this.boardObj.renderAll()
         this.stage -= 1
       }
+    },
+    composeImg () {
+      let base64Img = this.boardObj.toDataURL({
+        formart: 'png',
+        multiplier: 2
+      })
+      let bd = base64Img.split(',')
+      let mime = bd[0].match(/:(.*?);/)[1]
+      let bstr = atob(bd[1]); let l = bstr.length; let u8arr = new Uint8Array(l)
+      while (l--) {
+        u8arr[l] = bstr.charCodeAt(l)
+      }
+      let blobData = new Blob([u8arr], { type: mime })
+      console.log('blob', blobData)
+      FileSaver.saveAs(blobData, 'sketchpad.png')
     }
   }
 }
