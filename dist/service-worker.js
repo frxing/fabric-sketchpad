@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/precache-manifest.0cedf7e5aa0845f988521f61b1f1e69f.js"
+  "/precache-manifest.1551db709e20c6c330055c9b459ce46b.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "vue-fabric-sketchpad"});
