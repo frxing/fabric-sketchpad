@@ -1,4 +1,5 @@
 module.exports = {
+  assetsDir: 'static',
   pages: {
     index: {
       entry: 'examples/main.js',
