@@ -12,7 +12,7 @@
       </li>
     </ul>
     <!-- 画布 -->
-    <canvas id="myCanvas" ref="myCanvas"></canvas>
+    <canvas id="myCanvas" ref="myCanvas" ></canvas>
   </div>
 </template>
 
