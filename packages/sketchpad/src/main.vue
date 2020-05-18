@@ -1,10 +1,17 @@
 <template>
   <div class="board-box" :style="{width: canvasWidth + 'px', height: canvasHeight + 'px'}">
+    <!-- 上传图片 -->
+    <input type="file" accept="image/*" id="sketchpad-upload" ref="sketchpadUpload" @change="uploadImg($event)" >
+    <!-- 工具列表 -->
     <ul class="tool-box" :class="{'tool-box--left': placement === 'left', 'tool-box--top': placement === 'top', 'tool-box--right': placement === 'right', 'tool-box--bottom': placement === 'bottom'}">
       <li v-for="item in tools" :key="item.type" class="tool-con" :class="{active: toolType === item.type}" @click="changeTool(item.type)">
-        <i class="iconfont" :class="item.icon"></i>
+        <label for="sketchpad-upload" v-if="item.type === 'upload'">
+          <i class="iconfont" :class="item.icon"></i>
+        </label>
+        <i class="iconfont" v-else :class="item.icon"></i>
       </li>
     </ul>
+    <!-- 画布 -->
     <canvas id="myCanvas" ref="myCanvas"></canvas>
   </div>
 </template>
@@ -13,6 +20,7 @@
 import { fabric } from 'fabric'
 import FileSaver from 'file-saver'
 import './index.scss'
+console.log('fabric', fabric)
 
 let defaultProps = {
   canvasWidth: {
@@ -92,6 +100,11 @@ const TOOLS = [
     icon: 'icon-sanjiaoxing'
   },
   {
+    name: '上传图片',
+    type: 'upload',
+    icon: 'icon-seiyw41'
+  },
+  {
     name: '橡皮',
     type: 'rubber',
     icon: 'icon-xiangpi'
@@ -137,6 +150,7 @@ export default {
       history: [], // 存放历史记录
       textObj: null, // 存储文字对象
       stage: 0,
+      currImg: '',
       tools: TOOLS
     }
   },
@@ -274,6 +288,9 @@ export default {
       }
       if (type === 'clear') {
         return this.boardObj.clear()
+      }
+      if (type === 'upload') {
+        return
       }
       if (type === 'undo') {
         return this.undo()
@@ -463,6 +480,24 @@ export default {
       let blobData = new Blob([u8arr], { type: mime })
       console.log('blob', blobData)
       FileSaver.saveAs(blobData, 'sketchpad.png')
+    },
+    uploadImg (e) {
+      let imgData = e.target.files[0]
+      let reader = new FileReader()
+      reader.onload = res => {
+        let dataUrl = res.target.result
+        let imgObj = new Image()
+        imgObj.src = dataUrl
+        imgObj.onload = () => {
+          console.log('imgObj', imgObj)
+          var oImg = new fabric.Image(imgObj)
+          oImg.scale(0.5)
+          this.boardObj.centerObject(oImg).add(oImg).renderAll()
+          // 为了连续两次选择同一张图片不触发onchange事件
+          this.$refs.sketchpadUpload.value = ''
+        }
+      }
+      reader.readAsDataURL(imgData)
     }
   }
 }

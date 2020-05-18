@@ -4,6 +4,9 @@
   height: 100%;
   background: #f6f6f6;
 }
+#sketchpad-upload {
+  display: none;
+}
 .tool-box {
   position: absolute;
   z-index: 10;
@@ -48,6 +51,13 @@
     &.active {
       background: #333;
       color: #fff;
+    }
+    label {
+      width: 50px;
+      height: 50px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
   }
 }
