@@ -41,7 +41,7 @@ let defaultProps = {
   },
   placement: {
     type: String,
-    default: 'right'
+    default: 'left'
   }
 }
 
@@ -428,6 +428,7 @@ export default {
     addHistory () {
       this.history.push(JSON.stringify(this.boardObj))
     },
+    // 撤消
     undo () {
       let stack = this.history
       if (this.stage < stack.length) {
@@ -437,6 +438,7 @@ export default {
         this.stage += 1
       }
     },
+    // 前进
     redo () {
       let stack = this.history
       if (this.stage > 0) {
@@ -446,6 +448,7 @@ export default {
         this.stage -= 1
       }
     },
+    // 合成图片并下载
     composeImg () {
       let base64Img = this.boardObj.toDataURL({
         formart: 'png',
