@@ -1,5 +1,8 @@
 # vue-fabric-sketchpad
 
+本项目是用fabric开发的vue画板组件
+预览地址：http://sketchpad.frxing.cn
+
 ## 项目运行
 
 ```javascript
