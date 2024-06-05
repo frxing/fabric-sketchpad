@@ -1,5 +1,6 @@
 module.exports = {
   assetsDir: 'static',
+  publicPath: '/fabric-sketchpad',
   pages: {
     index: {
       entry: 'examples/main.js',
