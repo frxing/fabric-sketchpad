@@ -5,6 +5,7 @@
 预览地址： https://frxing.github.io/fabric-sketchpad/
 
 由于gitee Pages暂停服务，以下地址停止访问
+
 预览地址：~~https://btoa.gitee.io/fabric-sketchpad/#/~~ 
 
 ## 项目运行
